@@ -1,0 +1,6 @@
+Permission list:
+
+0 = Normal
+1 = kinda half OP (can use say command)
+2 = OP of bot (Usable all command except Exec and Shutdown bot)
+3 = Owner.
