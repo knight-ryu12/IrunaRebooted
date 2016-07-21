@@ -8,10 +8,6 @@ import org.pircbotx.hooks.events.MessageEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-
 /**
  * Created by chroma on 16/07/02.
  */
@@ -35,19 +31,15 @@ public class BotCommandListener extends ListenerAdapter {
             if(parsed.length == 3) {
                 logger.debug(String.valueOf(sh.getPermissionLevel(event.getUserHostmask().getHostmask(), event.getUserHostmask().getNick())));
                 if(sh.getPermissionLevel(event.getUserHostmask().getHostmask(),event.getUserHostmask().getNick()) >= 3) {
-                    Iterator<User> userIterator = event.getChannel().getUsers().iterator();
-                    while(userIterator.hasNext()){
-                        User u = userIterator.next();
-                        if(u.getNick().equalsIgnoreCase(parsed[1])) {
-                            if(sh.getPermissionLevel(u.getHostmask(),u.getNick()) == -1) {
-                                sh.addPermissionLevel(u.getHostmask(),u.getNick(),Integer.parseInt(parsed[2]));
-                            } else {
-                                sh.modifyPermissionLevel(u.getHostmask(),u.getNick(),Integer.parseInt(parsed[2]));
-                            }
-
-                            logger.debug("caller: modp "+u.getHostmask() + " " + u.getNick());
+                    event.getChannel().getUsers().stream().filter(u -> u.getNick().equalsIgnoreCase(parsed[1])).forEach(u -> {
+                        if (sh.getPermissionLevel(u.getHostmask(), u.getNick()) == -1) {
+                            sh.addPermissionLevel(u.getHostmask(), u.getNick(), Integer.parseInt(parsed[2]));
+                        } else {
+                            sh.modifyPermissionLevel(u.getHostmask(), u.getNick(), Integer.parseInt(parsed[2]));
                         }
-                    }
+
+                        logger.debug("caller: modp " + u.getHostmask() + " " + u.getNick());
+                    });
                     /*for(String user : userList) {
                         if(user.equalsIgnoreCase(parsed[1])){
                             if(sh.getPermissionLevel())

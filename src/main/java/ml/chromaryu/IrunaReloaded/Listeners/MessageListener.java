@@ -45,6 +45,7 @@ public class MessageListener extends ListenerAdapter {
             if(parsed.length == 2) {
                 String u = parsed[1];
                 String shorten = urlShortenerAPI.shorten(u);
+
                 event.getChannel().send().message(shorten);
             }
         }
@@ -84,7 +85,7 @@ public class MessageListener extends ListenerAdapter {
             );
         }
         if(parsed[0].equalsIgnoreCase("gettime")) {
-            String TZ = "GMT";;
+            String TZ = "GMT";
             Calendar cal;
             Locale locale;
             cal = Main.th.cal;

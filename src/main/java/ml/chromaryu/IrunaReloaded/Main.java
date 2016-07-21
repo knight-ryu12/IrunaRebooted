@@ -28,6 +28,7 @@ public class Main {
         //Logger logger = LoggerFactory.getLogger(Main.class);
         List<String> chanList = new ArrayList<>();
         InputStream is = new FileInputStream(new File(path + "/Config.properties"));
+        logger.info("configuration loaded.");
         configuration.load(is);
         String[] chan = configuration.getProperty("AutoJoinChannels").split(",");
         Collections.addAll(chanList, chan); //Nailed and lol
@@ -37,11 +38,17 @@ public class Main {
         conf.addListener(new GameListener());
         conf.addListener(new MessageListener());
         Configuration c = conf.buildConfiguration();
+        logger.info("configure has been made!");
         th = new currenttimethread();
         th.start();
+        logger.info("Thread Started!");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             th.sd = true;
         }, "Shutdown-thread"));
+        botEssential.MakeMysqlTables();
+        logger.info("Bot configure Complete!");
+        //botEssential.MakeSqliteTables();
+
         //logger.
         PircBotX bot = new PircBotX(c);
         bot.startBot();

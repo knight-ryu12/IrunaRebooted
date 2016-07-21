@@ -3,6 +3,8 @@ package ml.chromaryu.IrunaReloaded;
 import ml.chromaryu.IrunaReloaded.Listeners.BotCommandListener;
 import ml.chromaryu.IrunaReloaded.Listeners.GameListener;
 import ml.chromaryu.IrunaReloaded.Listeners.MessageListener;
+import ml.chromaryu.IrunaReloaded.SQL.SqlHandler;
+import ml.chromaryu.IrunaReloaded.SQL.sqlitehandler;
 import org.pircbotx.Configuration;
 
 import java.util.List;
@@ -20,6 +22,15 @@ public class botEssential {
                 .setAutoReconnect(true)
                 .setNickservNick("NickServ")
                 .setNickservPassword(password);
+    }
+    public static void MakeMysqlTables() {
+        SqlHandler sh = new SqlHandler();
+        sh.maketables();
+        Main.logger.info("Sql initialization complete!");
+    }
+    public static void MakeSqliteTables() {
+        sqlitehandler sh = new sqlitehandler();
+        sh.maketables();
     }
 
 }

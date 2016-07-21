@@ -1,6 +1,7 @@
 package ml.chromaryu.IrunaReloaded.SQL;
 
-import ml.chromaryu.IrunaReloaded.Main;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,30 +11,22 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
 /**
- * Created by chroma on 16/06/22.
+ * Created by chroma on 16/07/20.
  */
-public class SqlHandler {
-    private String url, username, password;
+public class sqlitehandler {
+    private String url;
     public Properties properties;
-    boolean ismysql = false;
-    Connection connection;
     public static String path = System.getProperty("user.dir");
-    public SqlHandler() {
+    Logger logger = LoggerFactory.getLogger(sqlitehandler.class);
+    public sqlitehandler() {
         try {
             //System.out.println(path);
             properties = new Properties();
             InputStream is = new FileInputStream(new File(path + "/sql.properties"));
             properties.load(is);
-            if(properties.getProperty("sqltype").equalsIgnoreCase("mysql")) {
-                ismysql = true;
-                url = "jdbc:mysql://" + properties.getProperty("sql.url") + ":" + properties.getProperty("sql.port") + "/" + properties.getProperty("sql.db") + "?useUnicode=true&characterEncoding=utf-8";
-                username = properties.getProperty("sql.user");
-                password = properties.getProperty("sql.pass");
-            } else {
-                url = "jdbc:sqlite:" + path + "/" +properties.getProperty("sqlite.db") + ".db";
-            }
+            url = "jdbc:sqlite:" + path + "/" +properties.getProperty("sqlite.db") + ".db";
+            logger.info(url);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,72 +40,41 @@ public class SqlHandler {
     }
     public Connection open() throws SQLException {
         try{
-            if(ismysql) {
-                Class.forName("com.mysql.jdbc.Driver");
-                connection = DriverManager.getConnection(url,username,password);
-            } else {
-                Class.forName("org.sqlite.JDBC");
-                connection = DriverManager.getConnection(url);
-            }
+            Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             return null;
         }
-        return connection;
+        return DriverManager.getConnection(url);
     }
     public boolean maketables() {
         Connection connection = null;
         try {
             connection = open();
-            if(ismysql) {
-                PreparedStatement ps = connection.prepareStatement(
-                        "CREATE TABLE IF NOT EXISTS Factoid" +
-                                "(" +
-                                "    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT," +
-                                "    keyword VARCHAR(255) NOT NULL," +
-                                "    message VARCHAR(255) NOT NULL," +
-                                "    hostmask VARCHAR(255) NOT NULL," +
-                                "    nickname VARCHAR(255) NOT NULL" +
-                                ");"
-                        //
-                );
-                ps.execute();
-                ps = connection.prepareStatement(
-                        "CREATE TABLE IF NOT EXISTS Permission" +
-                                "(" +
-                                "    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT," +
-                                "    hostmask VARCHAR(256) NOT NULL," +
-                                "    nickname VARCHAR(256) NOT NULL," +
-                                "    permissionlevel INT NOT NULL" +
-                                ");"
-                        //
-                );
-                ps.execute();
-            } else {
-                PreparedStatement ps = connection.prepareStatement(
-                        "CREATE TABLE IF NOT EXISTS Factoid" +
-                                "(" +
-                                "    id INT PRIMARY KEY NOT NULL," +
-                                "    keyword VARCHAR(255) NOT NULL," +
-                                "    message VARCHAR(255) NOT NULL," +
-                                "    hostmask VARCHAR(255) NOT NULL," +
-                                "    nickname VARCHAR(255) NOT NULL" +
-                                ");"
-                        //
-                );
-                ps.execute();
-                ps = connection.prepareStatement(
-                        "CREATE TABLE IF NOT EXISTS Permission" +
-                                "(" +
-                                "    id INT PRIMARY KEY NOT NULL," +
-                                "    hostmask VARCHAR(256) NOT NULL," +
-                                "    nickname VARCHAR(256) NOT NULL," +
-                                "    permissionlevel INT NOT NULL" +
-                                ");"
-                        //
-                );
-                ps.execute();
-            }
+            PreparedStatement ps;
+            ps = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS Factoid" +
+                            "(" +
+                            "    id INT PRIMARY KEY NOT NULL ," +
+                            "    keyword VARCHAR(255) NOT NULL," +
+                            "    message VARCHAR(255) NOT NULL," +
+                            "    hostmask VARCHAR(255) NOT NULL," +
+                            "    nickname VARCHAR(255) NOT NULL" +
+                            ");"
+                    //
+            );
+            ps.execute();
+            ps = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS Permission" +
+                            "(" +
+                            "    id INT PRIMARY KEY NOT NULL," +
+                            "    hostmask VARCHAR(256) NOT NULL," +
+                            "    nickname VARCHAR(256) NOT NULL," +
+                            "    permissionlevel INT NOT NULL" +
+                            ");"
+                    //
+            );
+            ps.execute();
             /*ps = connection.prepareStatement(
                     "CREATE UNIQUE INDEX unique_id ON Permission (id);"
             );
@@ -155,7 +117,7 @@ public class SqlHandler {
         try {
             connection = open();
             PreparedStatement ps = connection.prepareStatement(
-              "INSERT INTO Factoid (keyword, message, hostmask, nickname) VALUES (?,?,?,?);"
+                    "INSERT INTO Factoid (keyword, message, hostmask, nickname) VALUES (?,?,?,?);"
             );
             ps.setString(1,keyword);
             ps.setString(2,message);
@@ -175,7 +137,7 @@ public class SqlHandler {
         try {
             connection = open();
             PreparedStatement ps = connection.prepareStatement(
-                "UPDATE Factoid SET message = ? WHERE keyword = ?"
+                    "UPDATE Factoid SET message = ? WHERE keyword = ?"
             );
             ps.setString(2,keyword);
             ps.setString(1,message);
