@@ -42,6 +42,7 @@ public class pastebinApi {
             assert Hcon != null;
             Hcon.disconnect();
         }
-        return Jobj.toString();
+        assert Jobj != null;
+        return Jobj.get("key").toString();
     }
 }

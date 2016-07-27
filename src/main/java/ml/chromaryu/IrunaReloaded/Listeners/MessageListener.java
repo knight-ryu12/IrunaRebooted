@@ -4,19 +4,13 @@ import ml.chromaryu.IrunaReloaded.Main;
 import ml.chromaryu.IrunaReloaded.SQL.SqlHandler;
 import ml.chromaryu.IrunaReloaded.api.pastebinApi;
 import ml.chromaryu.IrunaReloaded.api.urlShortenerAPI;
-import org.apache.commons.codec.binary.StringUtils;
-import org.pircbotx.hooks.Event;
-import org.pircbotx.hooks.Listener;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static ml.chromaryu.IrunaReloaded.api.formatFileSize.*;
 import static ml.chromaryu.IrunaReloaded.api.formatTime.*;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+
 import java.util.*;
 
 /**
@@ -96,7 +90,7 @@ public class MessageListener extends ListenerAdapter {
                 TZ = parsed[1];
                 cal.setTimeZone(TimeZone.getTimeZone(TZ));
             }
-            String ret = cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, locale) + ", " + cal.getDisplayName(Calendar.MONTH, Calendar.LONG, locale) + " " + (cal.get(Calendar.DAY_OF_MONTH)) + ", " + cal.get(Calendar.YEAR) + " at " + cal.get(Calendar.HOUR_OF_DAY) + ":" + formatTime(cal.get(Calendar.MINUTE)) + ":" + formatTime(cal.get(Calendar.SECOND)) + " ("+ TZ + ")";
+            String ret = cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, locale) + ", " + cal.getDisplayName(Calendar.MONTH, Calendar.LONG, locale) + " " + (cal.get(Calendar.DAY_OF_MONTH)) + ", " + cal.get(Calendar.YEAR) + " at " + cal.get(Calendar.HOUR_OF_DAY) + ":" + formattime(cal.get(Calendar.MINUTE)) + ":" + formattime(cal.get(Calendar.SECOND)) + " ("+ TZ + ")";
             event.getChannel().send().message(ret);
         }
         if(parsed[0].equalsIgnoreCase("addfactoid")) {

@@ -24,10 +24,19 @@ public class Main {
     public static Properties configuration = new Properties();
     public static Logger logger = LoggerFactory.getLogger(Main.class);
     public static String path = System.getProperty("user.dir");
+    public static File configfile = new File(path + "/Config.properties");
     public static void main(String[] args) throws Exception {
         //Logger logger = LoggerFactory.getLogger(Main.class);
         List<String> chanList = new ArrayList<>();
-        InputStream is = new FileInputStream(new File(path + "/Config.properties"));
+        InputStream is;
+        if(!configfile.exists()) {
+            if (configfile.createNewFile()) {
+                botEssential.writeConfig(configfile);
+                logger.warn("configfile has been made, edit file!");
+                System.exit(0);
+            }
+        }
+        is = new FileInputStream(configfile);
         logger.info("configuration loaded.");
         configuration.load(is);
         String[] chan = configuration.getProperty("AutoJoinChannels").split(",");

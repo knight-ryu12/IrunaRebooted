@@ -7,6 +7,7 @@ import ml.chromaryu.IrunaReloaded.SQL.SqlHandler;
 import ml.chromaryu.IrunaReloaded.SQL.sqlitehandler;
 import org.pircbotx.Configuration;
 
+import java.io.*;
 import java.util.List;
 
 /**
@@ -31,6 +32,26 @@ public class botEssential {
     public static void MakeSqliteTables() {
         sqlitehandler sh = new sqlitehandler();
         sh.maketables();
+    }
+    public static void writeConfig(File f) {
+        String[] defaultconfig = {
+                "AutoJoinChannels = ",
+                "BotName = ",
+                "Server = ",
+                "Prefix = :",
+                "realname = ",
+                "password = "
+        };
+        try {
+            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(f)));
+            for (String s : defaultconfig) {
+                pw.println(s);
+            }
+            pw.flush();
+            pw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

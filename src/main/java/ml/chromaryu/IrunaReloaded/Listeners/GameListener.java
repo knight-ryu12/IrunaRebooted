@@ -38,7 +38,7 @@ public class GameListener extends ListenerAdapter {
                             Cnumlow = numlow;
                             randnumber = RandomNumber.showRandomInteger(numlow,numhigh);
                             Main.logger.info(String.valueOf(randnumber));
-                            event.getChannel().send().message("Game has been started by:" + event.getUser().getNick() + "　Join with " + prefix + "guess ! " );
+                            event.getChannel().send().message("Game has been started by:" + event.getUserHostmask().getNick() + "　Join with " + prefix + "guess ! " );
                         }
                         break;
                 }
