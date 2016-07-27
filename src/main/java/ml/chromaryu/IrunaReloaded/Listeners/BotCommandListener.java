@@ -63,6 +63,14 @@ public class BotCommandListener extends ListenerAdapter {
             }
 
         }
+        if(parsed[0].equalsIgnoreCase("change-prefix")) {
+            int permlv = sh.getPermissionLevel(event.getUserHostmask().getHostname(),event.getUserHostmask().getNick());
+            if(permlv >= 2) {
+                if (parsed.length == 2) {
+                    Main.prefix = parsed[1];
+                }
+            }
+        }
         if(parsed[0].equalsIgnoreCase("part")) {
             StringBuilder sb = new StringBuilder();
             int permlv = sh.getPermissionLevel(event.getUserHostmask().getHostname(), event.getUserHostmask().getNick());

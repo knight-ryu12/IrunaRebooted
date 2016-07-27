@@ -25,6 +25,7 @@ public class Main {
     public static Logger logger = LoggerFactory.getLogger(Main.class);
     public static String path = System.getProperty("user.dir");
     public static File configfile = new File(path + "/Config.properties");
+    public static String prefix;
     public static void main(String[] args) throws Exception {
         //Logger logger = LoggerFactory.getLogger(Main.class);
         List<String> chanList = new ArrayList<>();
@@ -40,6 +41,7 @@ public class Main {
         logger.info("configuration loaded.");
         configuration.load(is);
         String[] chan = configuration.getProperty("AutoJoinChannels").split(",");
+        prefix = configuration.getProperty("Prefix");
         Collections.addAll(chanList, chan); //Nailed and lol
         Configuration.Builder conf = botEssential.CreateConfig(configuration.getProperty("BotName"), configuration.getProperty("Server"), chanList, configuration.getProperty("realname"), configuration.getProperty("password"));
         //List<Listener> Listenerlist = new ArrayList<>();
